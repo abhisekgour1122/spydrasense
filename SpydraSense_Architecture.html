@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpydraSense CORE — Architecture</title>
+<style>
+  :root{ --green:#35e08e; --cyan:#4fd0ff; --blue:#4f8bff; --amber:#ffce6b; --ink:#e9f4f1; --muted:#7f96a0;
+         --panel:rgba(255,255,255,.04); --line:rgba(255,255,255,.10); --disp:'Segoe UI',system-ui,sans-serif; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:radial-gradient(1200px 700px at 50% -10%, #10242b, #070f14 60%); color:var(--ink);
+        font-family:var(--disp); padding:34px 20px 60px; }
+  .wrap{ max-width:1080px; margin:0 auto; }
+  h1{ font-size:30px; margin:0; font-weight:800; }
+  h1 span{ background:linear-gradient(90deg,var(--green),var(--cyan)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .sub{ color:var(--muted); margin:6px 0 4px; font-size:14px; }
+  .legend{ display:flex; gap:18px; flex-wrap:wrap; margin:14px 0 26px; font-size:12.5px; }
+  .pill{ display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+  .live{ background:rgba(53,224,142,.16); color:var(--green); border:1px solid rgba(53,224,142,.4); }
+  .pend{ background:rgba(255,255,255,.06); color:var(--muted); border:1px solid var(--line); }
+
+  .stage{ position:relative; }
+  .stagehead{ display:flex; align-items:center; gap:10px; margin:26px 0 12px; }
+  .stagehead .no{ width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+        font-weight:800; color:#04130d; background:linear-gradient(135deg,var(--green),var(--cyan)); font-size:15px; }
+  .stagehead h2{ font-size:16px; margin:0; letter-spacing:.5px; }
+  .stagehead .tag{ color:var(--muted); font-size:12px; margin-left:4px; }
+
+  .row{ display:flex; gap:16px; flex-wrap:wrap; }
+  .card{ flex:1; min-width:240px; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:15px 16px; }
+  .card.green{ border-color:rgba(53,224,142,.32); }
+  .card.cyan{ border-color:rgba(79,208,255,.32); }
+  .card h3{ margin:0 0 4px; font-size:14px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .card .src{ color:var(--cyan); font-size:11px; font-weight:600; }
+  .card ul{ margin:8px 0 0; padding-left:18px; color:var(--muted); font-size:12.5px; line-height:1.7; }
+  .card ul b{ color:var(--ink); font-weight:600; }
+  .arrow{ text-align:center; color:var(--muted); font-size:20px; line-height:1; margin:8px 0; }
+  .note{ font-size:11.5px; color:var(--muted); margin-top:8px; font-style:italic; }
+
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th,td{ text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); }
+  th{ color:var(--muted); font-weight:600; font-size:11.5px; letter-spacing:.5px; text-transform:uppercase; }
+  td .t{ font-weight:700; }
+  .eRow{ background:rgba(53,224,142,.07); }
+  .split{ font-family:ui-monospace,monospace; color:var(--cyan); }
+
+  .formula{ background:#0b1a20; border:1px solid rgba(79,208,255,.3); border-radius:12px; padding:16px 18px;
+            font-family:ui-monospace,monospace; font-size:14px; color:var(--ink); margin-top:4px; }
+  .formula b{ color:var(--green); }
+  .formula .small{ display:block; color:var(--muted); font-size:11.5px; margin-top:8px; font-family:var(--disp); }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:7px; margin-top:8px; }
+  .chip{ font-size:11px; padding:4px 9px; border-radius:7px; background:rgba(53,224,142,.12); border:1px solid rgba(53,224,142,.28); color:var(--ink); }
+  .chip.off{ background:rgba(255,255,255,.04); border-color:var(--line); color:var(--muted); }
+  .disc{ margin-top:30px; font-size:11.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:14px; font-style:italic; line-height:1.6; }
+  /* §7 threshold table */
+  .bands{ width:100%; border-collapse:collapse; font-size:12px; margin-top:4px; }
+  .bands th,.bands td{ padding:7px 8px; border-bottom:1px solid var(--line); text-align:center; }
+  .bands th{ font-size:10.5px; text-transform:none; letter-spacing:0; }
+  .bands td:first-child,.bands th:first-child{ text-align:left; }
+  .bands td:first-child{ font-weight:600; color:var(--ink); white-space:nowrap; }
+  .bands .u{ color:var(--muted); font-weight:400; font-size:10.5px; }
+  .bands .h1{ color:#ff8e8e; } .bands .h2{ color:var(--amber); } .bands .h3{ color:#cfe06b; }
+  .bands .h4{ color:#9be8b0; } .bands .h5{ color:var(--green); }
+  .bands td.b{ font-family:ui-monospace,monospace; font-size:11px; color:var(--muted); }
+  .bands tr.fam td{ background:rgba(53,224,142,.05); }
+  .scorehd{ font-size:11px; color:var(--muted); margin:2px 0 10px; }
+  /* V01–V10 table */
+  .vunits{ width:100%; border-collapse:collapse; font-size:12px; margin-top:6px; }
+  .vunits th,.vunits td{ padding:7px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  .vunits th{ font-size:10.5px; color:var(--muted); }
+  .vunits td:first-child{ font-family:ui-monospace,monospace; color:var(--cyan); font-weight:700; white-space:nowrap; }
+  .vunits .nm{ color:var(--ink); font-weight:600; }
+  .vunits .ms{ color:var(--muted); font-size:11.5px; }
+  .vunits tr.on td{ background:rgba(53,224,142,.06); }
+  .vunits tr.off td{ color:var(--muted); }
+  .vunits tr.off td:first-child{ color:#5f7680; }
+  .stat-live{ color:var(--green); font-weight:700; font-size:11px; }
+  .stat-pend{ color:var(--muted); font-size:11px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>SpydraSense™ CORE — <span>System Architecture</span></h1>
+  <div class="sub">Leadership Intelligence from Face + Voice · three traits (E · R · A) · everything scored on-device in the browser</div>
+  <div class="legend">
+    <span class="pill live">● LIVE today — E channel</span>
+    <span class="pill pend">○ 4-week delivery plan — R · A · CORE · Report</span>
+    <span style="color:var(--muted);font-size:12px">Section refs (§) point to the CORE / Facial spec docs.</span>
+  </div>
+
+  <!-- 1 CAPTURE -->
+  <div class="stage">
+    <div class="stagehead"><div class="no">1</div><h2>CAPTURE</h2><span class="tag">on the client's own device — no video leaves the browser</span></div>
+    <div class="row">
+      <div class="card green"><h3>📷 Webcam <span class="src">video</span></h3>
+        <ul><li>Live face, ~30 fps</li><li>Feeds the facial engine</li></ul></div>
+      <div class="card cyan"><h3>🎤 Microphone <span class="src">audio</span></h3>
+        <ul><li>Live voice</li><li>Feeds the voice engine</li></ul></div>
+    </div>
+  </div>
+  <div class="arrow">▼</div>
+
+  <!-- 2 EXTRACTION -->
+  <div class="stage">
+    <div class="stagehead"><div class="no">2</div><h2>EXTRACTION</h2><span class="tag">raw pixels / audio → measurable signals</span></div>
+    <div class="row">
+      <div class="card green"><h3>FACE — MediaPipe FaceLandmarker <span class="pill live">LIVE</span></h3>
+        <ul>
+          <li><b>52 blendshapes</b> → Action Units + gaze</li>
+          <li><b>Head-pose matrix</b> → yaw / pitch / nod</li>
+          <li><b>468 landmarks</b> → geometry, lean, lighting</li>
+        </ul>
+        <div class="chips">
+          <span class="chip">F01 Gaze</span><span class="chip">F02 Aversion</span><span class="chip">F03 Blink</span>
+          <span class="chip">F04 Frown</span><span class="chip">F05 Soft-eyes</span><span class="chip">F06 Stillness</span>
+          <span class="chip">F07 Yaw</span><span class="chip">F08 Duchenne</span><span class="chip">F09 Nod-align</span>
+          <span class="chip">F10 Mirroring</span><span class="chip">F11 Stays-open</span>
+        </div>
+      </div>
+      <div class="card cyan"><h3>VOICE — Web Audio API (browser DSP) <span class="pill live">7 LIVE</span></h3>
+        <ul>
+          <li><b>Live (E secondary):</b> real-time, on-device signal processing:</li>
+          <li><b>RMS</b> → Loudness &nbsp;·&nbsp; <b>Autocorrelation</b> → Pitch</li>
+          <li><b>FFT (AnalyserNode)</b> → spectral tilt → Warmth</li>
+        </ul>
+        <div class="chips">
+          <span class="chip">V01 Pitch&nbsp;steadiness</span><span class="chip">V03 Loudness</span><span class="chip">V08 Warmth</span>
+          <span class="chip">V02</span><span class="chip">V04</span><span class="chip">V07</span><span class="chip">V09</span>
+          <span class="chip off">V05</span><span class="chip off">V06</span><span class="chip off">V10</span>
+        </div>
+        <div class="note"><b>4-week plan:</b> the full V01–V10 voice engine (R / A, voice-primary) runs server-side on the standard toolkits — <b>eGeMAPS / openSMILE / Praat</b>.</div>
+      </div>
+    </div>
+    <div class="card cyan" style="margin-top:16px">
+      <h3>VOICE FEATURE-UNITS V01–V10 — 1–5 score bands <span class="src">from the Voice Parameter workbook · grounded in eGeMAPS / openSMILE / Praat</span></h3>
+      <div class="scorehd">Exact bands from the doc (candidate, baseline-relative, pending pilot calibration). <b>ST</b> = semitones. Green rows = <b style="color:var(--green)">LIVE</b> today (V01·V02·V03·V04·V07·V08·V09 as browser proxies; <b>*</b>V07 = HNR-only proxy, jitter is server-side). V05·V06·V10 = 4-week.</div>
+      <table class="bands">
+        <tr><th>Voice Feature-Unit</th><th class="h1">1 Absent</th><th class="h2">2</th><th class="h3">3</th><th class="h4">4</th><th class="h5">5 Exemplary</th><th>Status</th></tr>
+        <tr class="fam"><td>V01 Pitch level &amp; steadiness</td><td class="b">SD&gt;6 ST / drift&gt;+3</td><td class="b">SD 4–6 ST</td><td class="b">SD 2.5–4 ST</td><td class="b">SD 1.5–2.5 ST</td><td class="b">SD&lt;1.5 ST, holds</td><td><span class="stat-live">● LIVE</span></td></tr>
+        <tr class="fam"><td>V02 Pitch dynamism / range</td><td class="b">&lt;3 ST or &gt;12 erratic</td><td class="b">3–5 ST</td><td class="b">5–8 ST</td><td class="b">8–11 ST</td><td class="b">rich, controlled</td><td><span class="stat-live">● LIVE</span></td></tr>
+        <tr class="fam"><td>V03 Loudness / energy</td><td class="b">very low, fades</td><td class="b">low, fades at ends</td><td class="b">adequate, variable</td><td class="b">present, steady</td><td class="b">consistent, modulated</td><td><span class="stat-live">● LIVE</span></td></tr>
+        <tr class="fam"><td>V04 Speech &amp; articulation rate</td><td class="b">&gt;7 or &lt;3 syll/s</td><td class="b">rushed / sluggish</td><td class="b">~4–6 syll/s</td><td class="b">well-paced, modulates</td><td class="b">composed + slows on key</td><td><span class="stat-live">● LIVE</span></td></tr>
+        <tr><td>V05 Pause &amp; hesitation</td><td class="b">freq. long mid-clause</td><td class="b">noticeable hesitation</td><td class="b">mostly fluent</td><td class="b">fluent; boundary pauses</td><td class="b">confident pausing</td><td><span class="stat-pend">pending</span></td></tr>
+        <tr><td>V06 Disfluency (um/uh)</td><td class="b">&gt;10 /min</td><td class="b">6–10 /min</td><td class="b">3–6 /min</td><td class="b">1–3 /min</td><td class="b">&lt;1 /min</td><td><span class="stat-pend">pending</span></td></tr>
+        <tr class="fam"><td>V07 Voice quality (jitter·HNR)</td><td class="b">jit&gt;2%, HNR&lt;7dB</td><td class="b">1.5–2%, 7–10dB</td><td class="b">1–1.5%, 10–15dB</td><td class="b">&lt;1%, 15–20dB</td><td class="b">&lt;0.7%, &gt;20dB</td><td><span class="stat-live">● LIVE*</span></td></tr>
+        <tr class="fam"><td>V08 Vocal warmth / spectral tilt</td><td class="b">harsh/bright/flat</td><td class="b">occasional warmth</td><td class="b">some genuine warmth</td><td class="b">consistently warm</td><td class="b">rich, genuine warmth</td><td><span class="stat-live">● LIVE</span></td></tr>
+        <tr class="fam"><td>V09 Terminal contour</td><td class="b">pervasive uptalk</td><td class="b">frequent uptalk</td><td class="b">mixed terminals</td><td class="b">predominantly falling</td><td class="b">consistent confident falls</td><td><span class="stat-live">● LIVE</span></td></tr>
+        <tr><td>V10 Emphasis alignment</td><td class="b">flat / misplaced</td><td class="b">weak / occasional</td><td class="b">some on key words</td><td class="b">reliably on meaning</td><td class="b">precise, purposeful</td><td><span class="stat-pend">pending</span></td></tr>
+      </table>
+      <div class="note">These are the doc's <b>exact candidate bands</b> (from NETRA_Voice_Modulation_Parameters), baseline-relative and pending pilot calibration. The <b style="color:var(--green)">LIVE</b> demo computes <b>7 of 10 (V01·V02·V03·V04·V07·V08·V09)</b> as browser proxies; V05·V06·V10 and full eGeMAPS/Praat-grade calibration come with the voice engine (4-week).
+      For <b style="color:var(--green)">E</b>, all its voice units are now live; the full set also drives <b>R</b> &amp; <b>A</b> (voice-primary) in the 4-week plan.</div>
+    </div>
+    <div class="note" style="text-align:center">↓ &nbsp; BASELINE — first 8 s calibration records the resting face/voice; every score is read as a <b>z-score shift</b> from it (fair across faces &amp; cultures) &nbsp; §6</div>
+  </div>
+  <div class="arrow">▼</div>
+
+  <!-- 3 SCORING -->
+  <div class="stage">
+    <div class="stagehead"><div class="no">3</div><h2>SCORING</h2><span class="tag">every signal → 1–5 by spec thresholds (§7), then weighted into sub-skills (§8)</span></div>
+    <div class="card">
+      <h3>Per-signal 1–5 thresholds <span class="src">§7 — every signal</span></h3>
+      <div class="scorehd">Each feature is read as a shift from the person's baseline, then mapped to a level:
+        <span class="h1">1 Absent</span> · <span class="h2">2 Emerging</span> · <span class="h3">3 Competent</span> · <span class="h4">4 Strong</span> · <span class="h5">5 Exemplary</span></div>
+      <table class="bands">
+        <tr><th>Signal <span class="u">(unit)</span></th><th class="h1">1</th><th class="h2">2</th><th class="h3">3</th><th class="h4">4</th><th class="h5">5</th></tr>
+        <tr class="fam"><td>F01 Gaze-on-target <span class="u">%</span></td><td class="b">&lt;30</td><td class="b">30–45</td><td class="b">45–70</td><td class="b">70–85</td><td class="b">≥85</td></tr>
+        <tr><td>F02 Gaze-aversion <span class="u">/min</span></td><td class="b">&gt;12</td><td class="b">8–12</td><td class="b">4–8</td><td class="b">1.5–4</td><td class="b">≤1.5</td></tr>
+        <tr><td>F03 Blink rate <span class="u">/min</span></td><td class="b">&gt;40 / &lt;4</td><td class="b">30–40</td><td class="b">24–30</td><td class="b">6–24</td><td class="b">8–20 even</td></tr>
+        <tr><td>F04 Frown · AU4 <span class="u">σ</span></td><td class="b">&gt;2.5</td><td class="b">1.5–2.5</td><td class="b">0.8–1.5</td><td class="b">0.3–0.8</td><td class="b">≤0.3</td></tr>
+        <tr><td>F05 Eye-tension · AU7 <span class="u">σ</span></td><td class="b">&gt;2.5</td><td class="b">1.5–2.5</td><td class="b">0.8–1.5</td><td class="b">0.3–0.8</td><td class="b">≤0.3</td></tr>
+        <tr><td>Alarm · AU5 <span class="u">σ †</span></td><td class="b">&gt;2.5</td><td class="b">1.5–2.5</td><td class="b">0.8–1.5</td><td class="b">0.3–0.8</td><td class="b">≤0.3</td></tr>
+        <tr><td>F06 Stillness <span class="u">°/s</span></td><td class="b">&gt;10</td><td class="b">6–10</td><td class="b">3–6</td><td class="b">1.5–3</td><td class="b">≤1.5</td></tr>
+        <tr><td>F07 Head-yaw <span class="u">°</span></td><td class="b">&gt;28</td><td class="b">18–28</td><td class="b">10–18</td><td class="b">5–10</td><td class="b">≤5</td></tr>
+        <tr><td>F08 Duchenne <span class="u">0–1</span></td><td class="b">&lt;.15</td><td class="b">.15–.30</td><td class="b">.30–.45</td><td class="b">.45–.60</td><td class="b">≥.60</td></tr>
+        <tr><td>Brow-open <span class="u">σ †</span></td><td class="b">&lt;.2</td><td class="b">.2–.5</td><td class="b">.5–1.0</td><td class="b">1.0–1.8</td><td class="b">≥1.8</td></tr>
+        <tr class="fam"><td>F09 Nod-emphasis align <span class="u">%</span></td><td class="b">&lt;10</td><td class="b">10–30</td><td class="b">30–50</td><td class="b">50–70</td><td class="b">≥70</td></tr>
+        <tr><td>Nod rate <span class="u">/min †</span></td><td class="b">&lt;8</td><td class="b">8–20</td><td class="b">20–35</td><td class="b">35–55</td><td class="b">≥55</td></tr>
+        <tr class="fam"><td>F10 Affect-mirroring <span class="u">r</span></td><td class="b">&lt;.05</td><td class="b">.05–.2</td><td class="b">.2–.4</td><td class="b">.4–.6</td><td class="b">≥.6</td></tr>
+        <tr><td>Beat-align <span class="u">r</span></td><td class="b">&lt;.1</td><td class="b">.1–.25</td><td class="b">.25–.45</td><td class="b">.45–.6</td><td class="b">≥.6</td></tr>
+        <tr class="fam"><td>F11 Stays-open · AU4 onset <span class="u">s</span></td><td class="b">≤0.5s</td><td class="b">&lt;1s</td><td class="b">&lt;3s</td><td class="b">brief</td><td class="b">none</td></tr>
+      </table>
+      <div class="note">σ = standard-deviations from baseline · <b>†</b> = live extension (not in the doc §7 set — added for the live read) · green-highlighted rows = the dynamic Deep-Listening signals (need the Listening Test). Then <b>§8</b>: a weighted average → <b>Presence</b> &amp; <b>Deep Listening</b> per channel. (Voice bands are in the V01–V10 table above.)</div>
+    </div>
+  </div>
+  <div class="arrow">▼</div>
+
+  <!-- 4 TRAITS + FUSION -->
+  <div class="stage">
+    <div class="stagehead"><div class="no">4</div><h2>TRAITS &amp; CHANNEL FUSION</h2><span class="tag">Face + Voice combined per trait</span></div>
+    <table>
+      <tr><th>Trait</th><th>Channel split (Face : Voice)</th><th>Sub-skills</th><th>Status</th></tr>
+      <tr class="eRow"><td class="t">E — Neuro-Empathic</td><td class="split">65 : 35</td><td>Presence · Deep Listening</td><td><span class="pill live">LIVE</span></td></tr>
+      <tr><td class="t">R — Regenerative</td><td class="split">40 : 60</td><td>Team Healing · Deep Purpose</td><td><span class="pill pend">4-week</span></td></tr>
+      <tr><td class="t">A — Agentic</td><td class="split">30 : 70</td><td>Future Thinking · Bold Ownership</td><td><span class="pill pend">4-week</span></td></tr>
+    </table>
+    <div class="formula" style="margin-top:16px">
+      TraitScore = ( <b>w<sub>P</sub></b>·Q<sub>P</sub>·S<sub>P</sub> + <b>w<sub>S</sub></b>·Q<sub>S</sub>·S<sub>S</sub> ) ÷ ( <b>w<sub>P</sub></b>·Q<sub>P</sub> + <b>w<sub>S</sub></b>·Q<sub>S</sub> ) &nbsp;&nbsp;<span style="color:var(--muted)">§3</span>
+      <span class="small"><b>P = Primary channel · S = Secondary</b> (Face is Primary for E; Voice is Primary for R / A).
+      w<sub>P</sub>/w<sub>S</sub> = prior weights (E: 0.65 / 0.35) · S<sub>P</sub>/S<sub>S</sub> = each channel's 1–5 score · Q<sub>P</sub>/Q<sub>S</sub> = signal quality (0–1) → the cleaner channel gets more weight automatically.
+      <b style="color:var(--amber)">Disagreement gate:</b> if |S<sub>P</sub> − S<sub>S</sub>| ≥ 1.0 → widen the band, take the lower + flag. &nbsp;
+      <b style="color:var(--amber)">Evidence floor:</b> a channel with Q &lt; 0.40 is dropped &amp; the denominator re-normalised. &nbsp;§5</span>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>The 6 sub-skills — what each reads &amp; from which signals <span class="src">from the spec / Voice "sub-skills served"</span></h3>
+      <table class="bands">
+        <tr><th>Trait</th><th>Sub-skill</th><th>What it reads</th><th>Primary signals</th><th>Status</th></tr>
+        <tr class="fam"><td>E</td><td style="color:var(--ink);font-weight:600">Presence</td><td style="text-align:left;color:var(--muted)">present &amp; settled; gaze on speaker, calm still face</td><td class="b">Face F01–F08 (+ voice V01·V02·V04·V07·V08·V09)</td><td><span class="stat-live">● LIVE</span></td></tr>
+        <tr class="fam"><td>E</td><td style="color:var(--ink);font-weight:600">Deep Listening</td><td style="text-align:left;color:var(--muted)">responsive nods, sustained gaze, stays open under disagreement</td><td class="b">Face F09–F11 + shared F01·F02·F05·F06·F08 (+ voice V02·V04·V08)</td><td><span class="stat-live">● LIVE</span></td></tr>
+        <tr><td>R</td><td style="color:var(--ink);font-weight:600">Team Healing</td><td style="text-align:left;color:var(--muted)">warm, steady, restorative voice</td><td class="b">Voice V08·V01 (+ face F04·F05·F06·F08)</td><td><span class="stat-pend">4-week</span></td></tr>
+        <tr><td>R</td><td style="color:var(--ink);font-weight:600">Deep Purpose</td><td style="text-align:left;color:var(--muted)">conviction &amp; energy in delivery</td><td class="b">Voice V02·V03·V09·V10 (+ face F01·F06·F08·F11)</td><td><span class="stat-pend">4-week</span></td></tr>
+        <tr><td>A</td><td style="color:var(--ink);font-weight:600">Future Thinking</td><td style="text-align:left;color:var(--muted)">fluent, controlled, well-paced</td><td class="b">Voice V02·V05·V06·V10 (+ face F01·F06·F11)</td><td><span class="stat-pend">4-week</span></td></tr>
+        <tr><td>A</td><td style="color:var(--ink);font-weight:600">Bold Ownership</td><td style="text-align:left;color:var(--muted)">assertive, steady under pressure</td><td class="b">Voice V01·V03·V06·V07·V09 (+ face F01·F06·F11)</td><td><span class="stat-pend">4-week</span></td></tr>
+      </table>
+      <div class="note"><b>Primary signals</b> from the formal mapping (E face = §8 prompt set; R/A voice = the "sub-skills served" column). <b>Secondary signals</b> from the 20-stimulus battery (E voice; R/A face). Descriptions: E from the NETRA E report, R/A from the channel-primacy spec. Each sub-skill = §3 fusion of face + voice; trait = mean of its two sub-skills.</div>
+    </div>
+  </div>
+  <div class="arrow">▼</div>
+
+  <!-- 5 ASSESSMENT -->
+  <div class="stage">
+    <div class="stagehead"><div class="no">5</div><h2>ASSESSMENT FLOW</h2><span class="pill pend">4-week</span></div>
+    <div class="row">
+      <div class="card"><h3>20-stimulus battery</h3>
+        <ul><li>Neutral baseline → 20 prompts (≤30 s each)</li><li>Each captures Face + Voice together</li></ul>
+        <div class="note">E today uses the <b style="color:var(--green)">▶ Listening Test</b> — a scripted clip that drives F09 / F10 / F11 (mirroring, nod-align, stays-open). <span class="pill live">LIVE</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow">▼</div>
+
+  <!-- 6 REPORT + 7 OUTPUT -->
+  <div class="stage">
+    <div class="stagehead"><div class="no">6</div><h2>REPORT &amp; OUTPUT</h2></div>
+    <div class="row">
+      <div class="card green"><h3>Live panel &amp; sheet <span class="pill live">LIVE</span></h3>
+        <ul><li>Real-time E + Presence + Deep Listening</li><li>Confidence (Q1 valid · Q2 light · Q3 pose)</li>
+          <li>Excel / JSON snapshot — Face F01–F11 + Voice V01–V10 + fused E</li></ul></div>
+      <div class="card"><h3>Participant report <span class="pill pend">4-week</span></h3>
+        <ul><li>E·R·A radar chart · per-trait pages</li><li>Plain-language explanation + coaching tips</li></ul></div>
+    </div>
+  </div>
+
+  <!-- GLOSSARY -->
+  <div class="stage">
+    <div class="stagehead"><div class="no" style="background:none;font-size:20px">📖</div><h2>GLOSSARY</h2><span class="tag">the technical terms used above, in plain language</span></div>
+    <div class="row">
+      <div class="card cyan"><h3>🎤 Voice (acoustics)</h3>
+        <ul>
+          <li><b>F0</b> — fundamental frequency = the voice's <b>pitch</b> (high/low), in Hz</li>
+          <li><b>ST</b> — semitone, a unit of pitch (12 ST = one octave)</li>
+          <li><b>SD</b> — standard deviation = how much it <b>varies</b> (low SD = steady)</li>
+          <li><b>drift</b> — pitch slowly <b>creeping one way</b> (e.g. rising under stress)</li>
+          <li><b>HNR</b> — harmonics-to-noise ratio (dB) = how <b>clear vs breathy/noisy</b> the voice is (higher = cleaner)</li>
+          <li><b>jitter / shimmer</b> — tiny cycle-to-cycle wobble in <b>pitch / loudness</b> (lower = steadier)</li>
+          <li><b>RMS</b> — loudness measure · <b>FFT</b> — turns sound into its frequency spectrum</li>
+          <li><b>spectral tilt</b> — balance of low vs high frequencies; more low energy = <b>warm</b> tone</li>
+          <li><b>uptalk</b> — pitch <b>rising</b> at the end of a statement (sounds unsure / hedging)</li>
+          <li><b>syll/s</b> — syllables per second = <b>speaking speed</b></li>
+        </ul>
+      </div>
+      <div class="card green"><h3>📷 Face &amp; scoring</h3>
+        <ul>
+          <li><b>AU</b> — Action Unit = a standardised <b>facial-muscle movement</b> (FACS); e.g. AU4 = frown, AU12 = smile</li>
+          <li><b>blendshape</b> — MediaPipe's 0–1 value per facial movement → mapped to AUs</li>
+          <li><b>Duchenne</b> — a <b>genuine</b> smile (mouth + cheeks together), vs a polite smile</li>
+          <li><b>σ (sigma) / z-score</b> — how many <b>standard deviations</b> a value is from the person's own baseline (fair across faces)</li>
+          <li><b>yaw / pitch / roll</b> — head rotation: left-right / up-down / tilt</li>
+          <li><b>Q1·Q2·Q3</b> — signal quality: face-valid % · lighting · head-pose in range</li>
+          <li><b>§</b> — a section number in the NETRA spec documents</li>
+        </ul>
+      </div>
+      <div class="card"><h3>🛠️ Tools &amp; validation</h3>
+        <ul>
+          <li><b>FACS</b> — Facial Action Coding System: the standard catalogue of facial muscle movements (AUs)</li>
+          <li><b>MediaPipe FaceLandmarker</b> — the <b>face model</b> (blendshapes + pose + landmarks)</li>
+          <li><b>OpenCV</b> — computer-vision library for reading &amp; processing video frames</li>
+          <li><b>eGeMAPS / openSMILE / Praat</b> — standard, peer-reviewed <b>voice-analysis toolkits</b> the acoustic measures are based on</li>
+          <li><b>κ (kappa)</b> — agreement score between the AI and human raters; <b>≥ 0.6</b> = the target before any stakes</li>
+          <li><b>baseline-relative</b> — every score is read as a shift from the person's <b>own</b> resting sample</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="disc">
+    Parallel track — Calibration &amp; validation: every threshold is tuned against trained human raters (target weighted κ ≥ 0.6) before any stakes attach. ·
+    SpydraSense output is a <b>supportive behavioural indicator — not a verdict, diagnosis, or assessment</b>. It reads expressed behaviour as a shift from the person's own baseline, for voluntary development alongside human judgement.
+  </div>
+
+</div>
+</body>
+</html>
