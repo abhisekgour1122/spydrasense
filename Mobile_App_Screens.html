@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpydraSense — Mobile App Screens</title>
+<style>
+  :root{ --green:#35e08e; --cyan:#4fd0ff; --amber:#ffce6b; --ink:#e9f4f1; --muted:#8296a0;
+         --panel:rgba(255,255,255,.04); --line:rgba(255,255,255,.10); --disp:'Segoe UI',system-ui,sans-serif; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:radial-gradient(1200px 700px at 50% -10%, #10242b, #070f14 60%); color:var(--ink);
+        font-family:var(--disp); padding:34px 20px 60px; }
+  .wrap{ max-width:1000px; margin:0 auto; }
+  h1{ font-size:30px; margin:0; font-weight:800; }
+  h1 span{ background:linear-gradient(90deg,var(--green),var(--cyan)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .sub{ color:var(--muted); margin:6px 0 4px; font-size:14px; }
+  .meta{ display:flex; gap:16px; flex-wrap:wrap; margin:14px 0 22px; font-size:12.5px; color:var(--muted); }
+  .meta b{ color:var(--ink); }
+  .legend{ font-size:12px; color:var(--muted); margin:0 0 22px; }
+  .legend b.m1{ color:var(--green); } .legend b.m2{ color:var(--amber); }
+  .grouphead{ display:flex; align-items:center; gap:10px; margin:24px 0 12px; }
+  .grouphead .no{ min-width:30px; height:30px; padding:0 8px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+        font-weight:800; color:#04130d; background:linear-gradient(135deg,var(--green),var(--cyan)); font-size:15px; }
+  .grouphead h2{ font-size:16px; margin:0; letter-spacing:.5px; }
+  .grouphead .cnt{ color:var(--muted); font-size:12px; margin-left:4px; }
+  table{ width:100%; border-collapse:collapse; font-size:13px; background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  th,td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th{ color:var(--muted); font-weight:600; font-size:11px; letter-spacing:.5px; text-transform:uppercase; background:rgba(255,255,255,.03); }
+  td.n{ font-weight:800; color:var(--green); width:34px; }
+  td.pg{ font-weight:700; color:var(--ink); white-space:nowrap; }
+  td.ms{ white-space:nowrap; font-weight:700; font-size:11px; }
+  .m1{ color:var(--green); } .m2{ color:var(--amber); }
+  tr:last-child td{ border-bottom:none; }
+  .sumbar{ display:flex; flex-wrap:wrap; gap:8px; margin:26px 0 0; }
+  .chip{ font-size:12px; padding:5px 11px; border-radius:8px; background:rgba(53,224,142,.12); border:1px solid rgba(53,224,142,.28); color:var(--ink); }
+  .chip b{ color:var(--green); }
+  .total{ background:rgba(79,208,255,.14); border-color:rgba(79,208,255,.4); }
+  .note{ margin-top:22px; font-size:12px; color:var(--muted); border-top:1px solid var(--line); padding-top:14px; font-style:italic; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>SpydraSense™ — <span>Mobile App Screens</span></h1>
+  <div class="sub">Participant mobile app (React Native) · full screen map</div>
+  <div class="meta">
+    <span><b>Platform:</b> React Native (iOS + Android)</span>
+    <span><b>Total screens:</b> 22</span>
+    <span><b>Sections:</b> 6</span>
+  </div>
+  <div class="legend">Milestone key: <b class="m1">M1</b> = Milestone 1 (auth + assessment taking) · <b class="m2">M2</b> = Milestone 2 (results, reports, notifications, reliability)</div>
+
+  <!-- 1 ONBOARDING & AUTH -->
+  <div class="grouphead"><div class="no">1</div><h2>Onboarding &amp; Auth</h2><span class="cnt">3</span></div>
+  <table>
+    <tr><th>#</th><th>Screen</th><th>Purpose</th><th>Milestone</th></tr>
+    <tr><td class="n">1</td><td class="pg">Splash / Welcome</td><td>App launch, branding, entry</td><td class="ms m1">M1</td></tr>
+    <tr><td class="n">2</td><td class="pg">Login / Register</td><td>Participant sign-in / sign-up</td><td class="ms m1">M1</td></tr>
+    <tr><td class="n">3</td><td class="pg">Profile Onboarding</td><td>First-time profile setup</td><td class="ms m1">M1</td></tr>
+  </table>
+
+  <!-- 2 HOME & ASSESSMENT START -->
+  <div class="grouphead"><div class="no">2</div><h2>Home &amp; Assessment Start</h2><span class="cnt">3</span></div>
+  <table>
+    <tr><th>#</th><th>Screen</th><th>Purpose</th><th>Milestone</th></tr>
+    <tr><td class="n">4</td><td class="pg">Assessment Listing</td><td>Assigned assessments dashboard</td><td class="ms m1">M1</td></tr>
+    <tr><td class="n">5</td><td class="pg">Start Assessment</td><td>Assessment intro + start flow</td><td class="ms m1">M1</td></tr>
+    <tr><td class="n">6</td><td class="pg">Pre-session Instructions</td><td>How-to + consent before session</td><td class="ms m1">M1</td></tr>
+  </table>
+
+  <!-- 3 AI SESSION -->
+  <div class="grouphead"><div class="no">3</div><h2>AI Session (Assessment Taking)</h2><span class="cnt">4</span></div>
+  <table>
+    <tr><th>#</th><th>Screen</th><th>Purpose</th><th>Milestone</th></tr>
+    <tr><td class="n">7</td><td class="pg">Camera &amp; Mic Permissions</td><td>Request device permissions</td><td class="ms m1">M1</td></tr>
+    <tr><td class="n">8</td><td class="pg">Scenario Interaction</td><td>Stimulus plays (video/audio/image/prompt)</td><td class="ms m1">M1</td></tr>
+    <tr><td class="n">9</td><td class="pg">AI Session / Recording</td><td>Live face capture + audio/video recording</td><td class="ms m1">M1</td></tr>
+    <tr><td class="n">10</td><td class="pg">Timer / Response</td><td>Countdown + timed response, auto-submit</td><td class="ms m1">M1</td></tr>
+  </table>
+
+  <!-- 4 RESULTS & REPORTS -->
+  <div class="grouphead"><div class="no">4</div><h2>Results &amp; Reports</h2><span class="cnt">9</span></div>
+  <table>
+    <tr><th>#</th><th>Screen</th><th>Purpose</th><th>Milestone</th></tr>
+    <tr><td class="n">11</td><td class="pg">Score Dashboard</td><td>E·R·A scores overview</td><td class="ms m2">M2</td></tr>
+    <tr><td class="n">12</td><td class="pg">Trait Breakdown</td><td>Per-trait / sub-skill detail</td><td class="ms m2">M2</td></tr>
+    <tr><td class="n">13</td><td class="pg">Compare Score</td><td>Compare across sessions</td><td class="ms m2">M2</td></tr>
+    <tr><td class="n">14</td><td class="pg">Report View</td><td>Full E·R·A report</td><td class="ms m2">M2</td></tr>
+    <tr><td class="n">15</td><td class="pg">Download / Share Report</td><td>Export / share the report</td><td class="ms m2">M2</td></tr>
+    <tr><td class="n">16</td><td class="pg">Strength &amp; Gap Analysis</td><td>Key strengths &amp; areas to develop</td><td class="ms m2">M2</td></tr>
+    <tr><td class="n">17</td><td class="pg">AI Recommendations</td><td>Coaching suggestions</td><td class="ms m2">M2</td></tr>
+    <tr><td class="n">18</td><td class="pg">Progress Tracking</td><td>Growth over time</td><td class="ms m2">M2</td></tr>
+    <tr><td class="n">19</td><td class="pg">Re-attempt Assessment</td><td>Retake flow</td><td class="ms m2">M2</td></tr>
+  </table>
+
+  <!-- 5 NOTIFICATIONS -->
+  <div class="grouphead"><div class="no">5</div><h2>Notifications</h2><span class="cnt">1</span></div>
+  <table>
+    <tr><th>#</th><th>Screen</th><th>Purpose</th><th>Milestone</th></tr>
+    <tr><td class="n">20</td><td class="pg">Notifications / Alerts</td><td>Push notifications &amp; in-app alerts</td><td class="ms m2">M2</td></tr>
+  </table>
+
+  <!-- 6 RELIABILITY -->
+  <div class="grouphead"><div class="no">6</div><h2>Reliability &amp; Recovery</h2><span class="cnt">2</span></div>
+  <table>
+    <tr><th>#</th><th>Screen</th><th>Purpose</th><th>Milestone</th></tr>
+    <tr><td class="n">21</td><td class="pg">Resume Session</td><td>Recover an interrupted session (offline sync)</td><td class="ms m2">M2</td></tr>
+    <tr><td class="n">22</td><td class="pg">Error Handling</td><td>Error / retry states</td><td class="ms m2">M2</td></tr>
+  </table>
+
+  <!-- SUMMARY -->
+  <div class="sumbar">
+    <span class="chip">Onboarding &amp; Auth <b>3</b></span>
+    <span class="chip">Home &amp; Start <b>3</b></span>
+    <span class="chip">AI Session <b>4</b></span>
+    <span class="chip">Results &amp; Reports <b>9</b></span>
+    <span class="chip">Notifications <b>1</b></span>
+    <span class="chip">Reliability <b>2</b></span>
+    <span class="chip total">TOTAL <b>22 screens</b></span>
+  </div>
+
+  <div class="note">
+    Screens compiled from the NETRA MVP Platform Milestone Plan (Mobile team) — <b>Milestone 1</b> (auth, assessment taking, AI session capture) and <b>Milestone 2</b> (scoring/results, reports, recommendations, notifications, offline recovery). Background architecture tasks (RN setup, navigation, state, offline sync engine) are not listed as screens. Admin Web and Coach Portal are separate modules. · Confidential — FutureFirst Solutions.
+  </div>
+
+</div>
+</body>
+</html>
