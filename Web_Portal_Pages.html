@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpydraSense — Web Portal Pages</title>
+<style>
+  :root{ --green:#35e08e; --cyan:#4fd0ff; --amber:#ffce6b; --violet:#b39cff; --ink:#e9f4f1; --muted:#8296a0;
+         --panel:rgba(255,255,255,.04); --line:rgba(255,255,255,.10); --disp:'Segoe UI',system-ui,sans-serif; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:radial-gradient(1200px 700px at 50% -10%, #10242b, #070f14 60%); color:var(--ink);
+        font-family:var(--disp); padding:34px 20px 60px; }
+  .wrap{ max-width:1040px; margin:0 auto; }
+  h1{ font-size:30px; margin:0; font-weight:800; }
+  h1 span{ background:linear-gradient(90deg,var(--green),var(--cyan)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .sub{ color:var(--muted); margin:6px 0 4px; font-size:14px; }
+  .meta{ display:flex; gap:16px; flex-wrap:wrap; margin:14px 0 22px; font-size:12.5px; color:var(--muted); }
+  .meta b{ color:var(--ink); }
+  h3.rt{ font-size:14px; margin:22px 0 8px; color:var(--cyan); letter-spacing:.4px; }
+  .grouphead{ display:flex; align-items:center; gap:10px; margin:24px 0 12px; }
+  .grouphead .no{ min-width:30px; height:30px; padding:0 8px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+        font-weight:800; color:#04130d; background:linear-gradient(135deg,var(--green),var(--cyan)); font-size:15px; }
+  .grouphead.coach .no{ background:linear-gradient(135deg,var(--violet),var(--cyan)); }
+  .grouphead h2{ font-size:16px; margin:0; letter-spacing:.5px; }
+  .grouphead .cnt{ color:var(--muted); font-size:12px; margin-left:4px; }
+  table{ width:100%; border-collapse:collapse; font-size:13px; background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  th,td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th{ color:var(--muted); font-weight:600; font-size:11px; letter-spacing:.5px; text-transform:uppercase; background:rgba(255,255,255,.03); }
+  td.n{ font-weight:800; color:var(--green); width:34px; }
+  td.pg{ font-weight:700; color:var(--ink); white-space:nowrap; }
+  td.role{ font-size:11px; color:var(--muted); white-space:nowrap; }
+  tr:last-child td{ border-bottom:none; }
+  .sumbar{ display:flex; flex-wrap:wrap; gap:8px; margin:26px 0 0; }
+  .chip{ font-size:12px; padding:5px 11px; border-radius:8px; background:rgba(53,224,142,.12); border:1px solid rgba(53,224,142,.28); color:var(--ink); }
+  .chip b{ color:var(--green); }
+  .total{ background:rgba(79,208,255,.14); border-color:rgba(79,208,255,.4); }
+  .note{ margin-top:22px; font-size:12px; color:var(--muted); border-top:1px solid var(--line); padding-top:14px; font-style:italic; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>SpydraSense™ — <span>Web Portal</span></h1>
+  <div class="sub">One web login · Role-Based Access Control (RBAC) · Super Admin · Admin · Coach</div>
+  <div class="meta">
+    <span><b>Backend:</b> Django + DRF · PostgreSQL · JWT</span>
+    <span><b>Total pages:</b> 38</span>
+    <span><b>Roles:</b> 3 web + Participant (mobile)</span>
+  </div>
+
+  <!-- ROLES & ACCESS -->
+  <h3 class="rt">Roles &amp; Access (single login → role decides menu)</h3>
+  <table>
+    <tr><th>Role</th><th>Access</th><th>Where</th></tr>
+    <tr><td class="pg" style="color:var(--cyan)">Super Admin</td><td>Everything — all modules incl. monitoring, integrations, security, AI config</td><td class="role">Web</td></tr>
+    <tr><td class="pg" style="color:var(--green)">Admin</td><td>Org, Users, Assessments, Reports (no system/super-admin pages)</td><td class="role">Web</td></tr>
+    <tr><td class="pg" style="color:var(--violet)">Coach</td><td>Coach pages only — dashboard, session review/playback, feedback, progress</td><td class="role">Web</td></tr>
+    <tr><td class="pg" style="color:var(--muted)">Participant</td><td>Takes assessments — no web access</td><td class="role">Mobile app</td></tr>
+  </table>
+
+  <!-- ================= ADMIN / SUPER-ADMIN AREA ================= -->
+
+  <!-- 1 AUTH -->
+  <div class="grouphead"><div class="no">1</div><h2>Authentication</h2><span class="cnt">3 · all web roles</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">1</td><td class="pg">Login</td><td>Single web sign-in (role resolved after login)</td></tr>
+    <tr><td class="n">2</td><td class="pg">Forgot Password</td><td>Request reset link</td></tr>
+    <tr><td class="n">3</td><td class="pg">Change / Reset Password</td><td>Set a new password</td></tr>
+  </table>
+
+  <!-- 2 DASHBOARDS -->
+  <div class="grouphead"><div class="no">2</div><h2>Dashboards</h2><span class="cnt">3 · Super Admin / Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">4</td><td class="pg">Admin Dashboard</td><td>Main overview — KPIs, activity, quick links</td></tr>
+    <tr><td class="n">5</td><td class="pg">Super Admin Dashboard</td><td>Top-level control across all orgs</td></tr>
+    <tr><td class="n">6</td><td class="pg">Organization Dashboard</td><td>Per-org overview &amp; analytics</td></tr>
+  </table>
+
+  <!-- 3 ORG & USERS -->
+  <div class="grouphead"><div class="no">3</div><h2>Organization &amp; Users</h2><span class="cnt">5 · Super Admin / Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">7</td><td class="pg">Organization Management</td><td>List &amp; manage all orgs (multi-tenant)</td></tr>
+    <tr><td class="n">8</td><td class="pg">Organization Setup</td><td>Create / configure an org</td></tr>
+    <tr><td class="n">9</td><td class="pg">User Invite</td><td>Invite users by email</td></tr>
+    <tr><td class="n">10</td><td class="pg">Bulk Upload</td><td>Import many users (CSV)</td></tr>
+    <tr><td class="n">11</td><td class="pg">User Management</td><td>User list, activate/deactivate, role assign</td></tr>
+  </table>
+
+  <!-- 4 RBAC -->
+  <div class="grouphead"><div class="no">4</div><h2>Roles &amp; Permissions (RBAC)</h2><span class="cnt">2 · Super Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">12</td><td class="pg">Role Management</td><td>Create / edit roles</td></tr>
+    <tr><td class="n">13</td><td class="pg">Permission Mapping</td><td>Map permissions to roles (matrix)</td></tr>
+  </table>
+
+  <!-- 5 ASSESSMENTS -->
+  <div class="grouphead"><div class="no">5</div><h2>Assessments</h2><span class="cnt">3 · Super Admin / Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">14</td><td class="pg">Assessment Builder</td><td>Create / edit assessments</td></tr>
+    <tr><td class="n">15</td><td class="pg">Scenario Builder</td><td>Build stimulus scenarios (E1–E7 …)</td></tr>
+    <tr><td class="n">16</td><td class="pg">Assignment</td><td>Assign assessments to participants/coaches</td></tr>
+  </table>
+
+  <!-- 6 AI CONFIG -->
+  <div class="grouphead"><div class="no">6</div><h2>AI Configuration</h2><span class="cnt">1 · Super Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">17</td><td class="pg">AI Config</td><td>F-bands / V-bands, fusion weights (§7/§8), model config, versioning</td></tr>
+  </table>
+
+  <!-- 7 REPORTS & ANALYTICS -->
+  <div class="grouphead"><div class="no">7</div><h2>Reports &amp; Analytics</h2><span class="cnt">4 · Super Admin / Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">18</td><td class="pg">Reports Dashboard</td><td>View / download E·R·A reports, filters, export</td></tr>
+    <tr><td class="n">19</td><td class="pg">Individual Report</td><td>Single-participant E·R·A report view</td></tr>
+    <tr><td class="n">20</td><td class="pg">Team Comparison Dashboard</td><td>Compare / benchmark across a team</td></tr>
+    <tr><td class="n">21</td><td class="pg">Analytics Charts &amp; Graphs</td><td>Trends, aggregation, visual analytics</td></tr>
+  </table>
+
+  <!-- 8 MONITORING -->
+  <div class="grouphead"><div class="no">8</div><h2>Monitoring</h2><span class="cnt">3 · Super Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">22</td><td class="pg">Monitoring Dashboard</td><td>System / AI monitoring overview</td></tr>
+    <tr><td class="n">23</td><td class="pg">Integration Monitoring Dashboard</td><td>External-integration health</td></tr>
+    <tr><td class="n">24</td><td class="pg">Queue Monitoring Dashboard</td><td>Job/queue status (scoring, reports)</td></tr>
+  </table>
+
+  <!-- 9 NOTIFICATIONS -->
+  <div class="grouphead"><div class="no">9</div><h2>Notifications</h2><span class="cnt">3 · Super Admin / Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">25</td><td class="pg">Notification Center / Management</td><td>Manage &amp; send notifications</td></tr>
+    <tr><td class="n">26</td><td class="pg">Notification Templates</td><td>Create / edit notification templates</td></tr>
+    <tr><td class="n">27</td><td class="pg">Notification Logs Dashboard</td><td>Delivery logs &amp; history</td></tr>
+  </table>
+
+  <!-- 10 INTEGRATIONS -->
+  <div class="grouphead"><div class="no">10</div><h2>Integrations</h2><span class="cnt">1 · Super Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">28</td><td class="pg">API / Integration Config</td><td>Configure external API integrations</td></tr>
+  </table>
+
+  <!-- 11 SECURITY -->
+  <div class="grouphead"><div class="no">11</div><h2>Security</h2><span class="cnt">3 · Super Admin</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">29</td><td class="pg">Security Audit</td><td>Security audit overview</td></tr>
+    <tr><td class="n">30</td><td class="pg">Audit Logs</td><td>Full activity / audit trail</td></tr>
+    <tr><td class="n">31</td><td class="pg">Security Alerts / Threat Detection</td><td>Alerts &amp; threat dashboard</td></tr>
+  </table>
+
+  <!-- 12 PROFILE -->
+  <div class="grouphead"><div class="no">12</div><h2>Profile</h2><span class="cnt">1 · all web roles</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">32</td><td class="pg">Profile / Settings</td><td>Signed-in user's own profile &amp; settings</td></tr>
+  </table>
+
+  <!-- ================= COACH PORTAL (Coach role) ================= -->
+  <div class="grouphead coach"><div class="no">C</div><h2>Coach Portal</h2><span class="cnt">6 · Coach role (same login, RBAC-gated)</span></div>
+  <table>
+    <tr><th>#</th><th>Page</th><th>Purpose</th></tr>
+    <tr><td class="n">33</td><td class="pg">Coach Dashboard</td><td>Coach's assigned participants &amp; overview</td></tr>
+    <tr><td class="n">34</td><td class="pg">Session Listing</td><td>List sessions (with search &amp; filter)</td></tr>
+    <tr><td class="n">35</td><td class="pg">Session Review / Playback</td><td>Video playback + session metadata review</td></tr>
+    <tr><td class="n">36</td><td class="pg">Progress Tracking</td><td>Participant growth over time</td></tr>
+    <tr><td class="n">37</td><td class="pg">Feedback</td><td>Coach feedback on a session</td></tr>
+    <tr><td class="n">38</td><td class="pg">Suggestions</td><td>Coaching suggestions / recommendations</td></tr>
+  </table>
+
+  <!-- SUMMARY -->
+  <div class="sumbar">
+    <span class="chip">Auth <b>3</b></span>
+    <span class="chip">Dashboards <b>3</b></span>
+    <span class="chip">Org &amp; Users <b>5</b></span>
+    <span class="chip">RBAC <b>2</b></span>
+    <span class="chip">Assessments <b>3</b></span>
+    <span class="chip">AI Config <b>1</b></span>
+    <span class="chip">Reports &amp; Analytics <b>4</b></span>
+    <span class="chip">Monitoring <b>3</b></span>
+    <span class="chip">Notifications <b>3</b></span>
+    <span class="chip">Integrations <b>1</b></span>
+    <span class="chip">Security <b>3</b></span>
+    <span class="chip">Profile <b>1</b></span>
+    <span class="chip" style="background:rgba(179,156,255,.14);border-color:rgba(179,156,255,.4)">Coach Portal <b>6</b></span>
+    <span class="chip total">TOTAL <b>38 pages</b></span>
+  </div>
+
+  <div class="note">
+    One web login with RBAC — role decides which menu &amp; pages are shown (no separate Coach login). Roles: <b>Super Admin, Admin, Coach</b> (+ <b>Participant</b> on the Mobile App). The Participant assessment flow lives in the separate Mobile App. · Confidential — FutureFirst Solutions.
+  </div>
+
+</div>
+</body>
+</html>
