@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NETRA N & T — Device Details & Requirements</title>
+<style>
+  :root{ --ink:#1f2a37; --muted:#5f6b7a; --line:#e6ebf1; --bg:#f6f9fc; --card:#fff;
+         --blue:#2e5496; --green:#2e9e5b; --amber:#c0842a; --red:#c0392b; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.6; }
+  .wrap{ max-width:900px; margin:0 auto; padding:42px 26px 80px; }
+  h1{ font-size:26px; margin:0 0 4px; } h1 span{ color:var(--blue); }
+  .sub{ color:var(--muted); font-size:14px; margin-bottom:24px; }
+  h2{ font-size:18px; margin:30px 0 10px; padding-bottom:6px; border-bottom:2px solid var(--line); }
+  h2 .n{ display:inline-block; width:26px; height:26px; line-height:26px; text-align:center; background:var(--blue); color:#fff; border-radius:50%; font-size:13px; margin-right:8px; }
+  p,li{ font-size:14px; } ul{ margin:6px 0; padding-left:22px; } li{ margin:4px 0; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 20px; margin:10px 0; }
+  table{ width:100%; border-collapse:collapse; font-size:13px; background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin:8px 0; }
+  th,td{ text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th{ background:#eef2f7; font-size:11px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); }
+  tr:last-child td{ border-bottom:none; }
+  .yes{ color:var(--green); font-weight:700; } .no{ color:var(--red); font-weight:700; }
+  .pick{ background:#eefaf2; }
+  .req{ background:#fff8ec; border:1px solid #f0dcae; border-radius:10px; padding:14px 18px; }
+  .foot{ margin-top:34px; padding-top:14px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); }
+  code{ font-family:ui-monospace,Menlo,Consolas,monospace; font-size:12.5px; background:#eef2f7; padding:1px 5px; border-radius:4px; color:var(--blue); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>NETRA™ <span>N &amp; T</span> — Device Details &amp; Requirements</h1>
+  <div class="sub">Sensor device requirements for the Neuro-Leadership (Neuroplastic &amp; Techno-Sapient) assessment</div>
+
+  <!-- 1 -->
+  <h2><span class="n">1</span>Core requirement</h2>
+  <div class="req">
+    <p>The assessment reads two things at once, so the device (single unit or a paired set) <b>must provide BOTH:</b></p>
+    <ul>
+      <li><b>EEG (brain activity)</b> → drives <b>T</b> (Focus, Brain Fatigue, Mental Pressure)</li>
+      <li><b>PPG or ECG (heart rhythm → HRV)</b> → drives <b>N</b> (SDNN, RMSSD, and the HRV-based measures)</li>
+    </ul>
+    <p style="margin-bottom:0"><b>An EEG-only device is not sufficient</b> — without a heart/HRV sensor, the N index cannot be produced. A single device with both (or an EEG device paired with a dedicated HRV sensor) is required.</p>
+  </div>
+
+  <!-- 2 -->
+  <h2><span class="n">2</span>Required parameters / specifications</h2>
+  <table>
+    <tr><th>Parameter</th><th>Requirement</th><th>Why</th></tr>
+    <tr><td><b>EEG channels</b></td><td>Minimum 4 (more = better spatial detail)</td><td>Frontal/temporal coverage for focus &amp; fatigue</td></tr>
+    <tr><td><b>EEG sampling rate</b></td><td>≥ 256 Hz</td><td>Clean frequency-band analysis</td></tr>
+    <tr><td><b>Frequency bands</b></td><td>Delta, Theta, Alpha, Beta, Gamma</td><td>Focus (Beta), fatigue (Theta), regulation (Alpha)</td></tr>
+    <tr><td><b>Heart / HRV source</b></td><td>PPG or ECG providing inter-beat (RR) intervals</td><td>To compute SDNN &amp; RMSSD (the core of N)</td></tr>
+    <tr><td><b>HRV capture window</b></td><td>≥ 5 min for a stable SDNN (3 min OK for RMSSD)</td><td>Reliability of the N reading</td></tr>
+    <tr><td><b>Data access</b></td><td>SDK / API to read live signals or per-session outputs</td><td>So our software can ingest and score</td></tr>
+    <tr><td><b>Connectivity</b></td><td>Bluetooth (BLE) or streaming (LSL)</td><td>Real-time capture</td></tr>
+    <tr><td><b>Wearability</b></td><td>Comfortable with / under a VR headset</td><td>Sessions run inside VR scenes</td></tr>
+    <tr><td><b>Signal quality</b></td><td>Contact/quality indicator per channel</td><td>Reject bad segments before scoring</td></tr>
+  </table>
+
+  <!-- 3 -->
+  <h2><span class="n">3</span>The eleven readings the device must support</h2>
+  <div class="card">
+    <p>These feed the two indices (either output directly by the device pipeline, or derived by us from the raw EEG bands + HRV):</p>
+    <table>
+      <tr><th>For N (adaptive)</th><th>For T (cognitive-readiness)</th></tr>
+      <tr><td>SDNN, RMSSD, Stress Resistance, Brain Balance, Fatigue, LF/HF · HR</td><td>Focus, Brain Fatigue, Mental Pressure, Relaxation</td></tr>
+    </table>
+    <p style="margin-bottom:0"><i>Emotional State is captured but held (unweighted) until polarity is confirmed.</i></p>
+  </div>
+
+  <!-- 4 -->
+  <h2><span class="n">4</span>Candidate devices</h2>
+  <table>
+    <tr><th>Device</th><th>EEG</th><th>PPG/HRV</th><th>Sampling</th><th>SDK</th><th>Fit for N &amp; T</th></tr>
+    <tr class="pick"><td><b>Muse 2 / Muse S</b> (Interaxon)</td><td>4 ch</td><td class="yes">Yes (PPG)</td><td>256 Hz</td><td>Public (Mind Monitor / LSL)</td><td class="yes">✔ All-in-one — recommended</td></tr>
+    <tr><td><b>HealSphere device</b></td><td>Yes</td><td class="yes">Yes</td><td>—</td><td>Proprietary (from HealSphere)</td><td class="yes">✔ Outputs all 11 readings directly</td></tr>
+    <tr><td><b>Emotiv EPOC X / Insight</b></td><td>14 / 5 ch</td><td class="no">No</td><td>128–256 Hz</td><td>Cortex API</td><td>Needs added HRV sensor</td></tr>
+    <tr><td><b>BrainBit Mindo</b></td><td>4 ch (dry)</td><td class="no">No</td><td>250 Hz</td><td>Public SDK</td><td>Needs added HRV sensor</td></tr>
+    <tr><td><b>NeuroSky MindWave</b></td><td>1 ch</td><td class="no">No</td><td>512 Hz</td><td>Public SDK</td><td>Too limited (1 ch, no HRV)</td></tr>
+    <tr><td><b>Polar H10</b> (pair with an EEG device)</td><td class="no">No</td><td class="yes">Yes (ECG)</td><td>1000 Hz</td><td>Public SDK</td><td>Gold-standard HRV — pair with EEG for N</td></tr>
+  </table>
+
+  <h3 style="font-size:14px;color:var(--blue);margin:16px 0 4px">Official product pages (for reference)</h3>
+  <table>
+    <tr><th>Device</th><th>Official page</th></tr>
+    <tr><td>Muse 2 / Muse S</td><td><a href="https://choosemuse.com" style="color:#2e5496">choosemuse.com</a></td></tr>
+    <tr><td>HealSphere</td><td><a href="https://healandsoultech.com/" style="color:#2e5496">healandsoultech.com</a></td></tr>
+    <tr><td>Emotiv EPOC X / Insight</td><td><a href="https://www.emotiv.com" style="color:#2e5496">emotiv.com</a></td></tr>
+    <tr><td>BrainBit Mindo</td><td><a href="https://brainbit.com" style="color:#2e5496">brainbit.com</a></td></tr>
+    <tr><td>NeuroSky MindWave</td><td><a href="https://neurosky.com" style="color:#2e5496">neurosky.com</a></td></tr>
+    <tr><td>Polar H10</td><td><a href="https://www.polar.com/en/sensors/h10-heart-rate-sensor" style="color:#2e5496">polar.com</a></td></tr>
+  </table>
+
+  <!-- 5 -->
+  <h2><span class="n">5</span>Recommendation</h2>
+  <div class="card">
+    <ul>
+      <li><b>If a consumer device is preferred</b> — <b>Muse 2 / Muse S</b> is the strongest single-unit choice: it provides EEG + PPG together, at 256 Hz, with a public SDK.</li>
+      <li><b>If HealSphere's own device is used</b> — best path: it already outputs all eleven readings. We would need its SDK/API documentation.</li>
+      <li><b>If a research-grade EEG is preferred</b> (e.g. Emotiv/BrainBit) — pair it with a <b>Polar H10</b> chest strap for clean HRV, since those EEG units do not include a heart sensor.</li>
+    </ul>
+    <p style="margin-bottom:0"><b>Bottom line:</b> the one non-negotiable is <b>EEG + HRV together</b>. Muse 2/S delivers both in a single headband and is our default recommendation unless HealSphere's device is used.</p>
+  </div>
+
+  <div class="foot">
+  </div>
+
+</div>
+</body>
+</html>
