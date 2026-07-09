@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NETRA N & T — Project Document</title>
+<style>
+  :root{ --ink:#1f2a37; --muted:#5f6b7a; --line:#e6ebf1; --bg:#f6f9fc; --card:#fff;
+         --blue:#2e5496; --green:#2e9e5b; --amber:#c0842a;
+         --code:#0e1726; --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.65; }
+  .wrap{ max-width:900px; margin:0 auto; padding:42px 26px 90px; }
+  h1{ font-size:28px; margin:0 0 4px; } h1 span{ color:var(--blue); }
+  .sub{ color:var(--muted); font-size:14px; margin-bottom:20px; }
+  .part{ margin:38px 0 6px; padding:10px 16px; background:var(--blue); color:#fff; border-radius:8px; font-size:15px; font-weight:700; letter-spacing:.4px; }
+  .part small{ display:block; font-weight:400; font-size:12px; opacity:.85; margin-top:2px; }
+  h2{ font-size:18px; margin:28px 0 10px; padding-bottom:6px; border-bottom:2px solid var(--line); }
+  h2 .n{ display:inline-block; min-width:26px; height:26px; line-height:26px; text-align:center; background:var(--blue); color:#fff; border-radius:50%; font-size:13px; margin-right:8px; padding:0 6px; }
+  h3{ font-size:14px; margin:18px 0 6px; color:var(--blue); }
+  p,li{ font-size:14px; } ul{ margin:6px 0; padding-left:22px; } li{ margin:4px 0; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 20px; margin:10px 0; }
+  table{ width:100%; border-collapse:collapse; font-size:13px; background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin:8px 0; }
+  th,td{ text-align:left; padding:8px 11px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th{ background:#eef2f7; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); }
+  tr:last-child td{ border-bottom:none; }
+  code{ font-family:var(--mono); font-size:12.5px; background:#eef2f7; padding:1px 5px; border-radius:4px; color:var(--blue); }
+  pre{ background:var(--code); color:#dce6f2; border-radius:10px; padding:14px 16px; overflow-x:auto; font-family:var(--mono); font-size:12.5px; line-height:1.5; }
+  pre .c{ color:#7f9bbd; }
+  .two{ display:flex; gap:14px; flex-wrap:wrap; }
+  .two .box{ flex:1; min-width:250px; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+  .box.n{ border-top:3px solid var(--green); } .box.t{ border-top:3px solid var(--blue); }
+  .box h3{ margin:0 0 4px; font-size:15px; color:inherit; }
+  .step{ display:flex; gap:12px; align-items:flex-start; margin:10px 0; }
+  .step .dot{ flex:0 0 30px; height:30px; background:#eaf1fb; color:var(--blue); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+  .phase{ border-left:3px solid var(--blue); padding:2px 0 2px 14px; margin:12px 0; }
+  .phase b{ color:var(--blue); }
+  .safe{ background:#eefaf2; border:1px solid #bfe6cf; border-radius:10px; padding:14px 18px; }
+  .need{ background:#fff8ec; border:1px solid #f0dcae; border-radius:10px; padding:14px 18px; }
+  .foot{ margin-top:36px; padding-top:16px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>NETRA™ <span>N &amp; T</span> — Project Document</h1>
+  <div class="sub">Neuro-Leadership Assessment (Neuroplastic &amp; Techno-Sapient) via EEG + PPG · Understanding, Plain Overview &amp; Technical Plan · Confidential</div>
+
+  <p>This document combines our understanding of the requirement, a plain-language overview, and the technical build plan. <b>Part 1</b> is written for any reader; <b>Part 2</b> adds the technical detail for the build team.</p>
+
+  <!-- ======================= PART 1 ======================= -->
+  <div class="part">PART 1 — OVERVIEW <small>Plain language — for everyone</small></div>
+
+  <h2><span class="n">1</span>What we're building</h2>
+  <div class="card">
+    <p>A system that reads a leader's <b>brain activity (EEG)</b> and <b>heart rhythm (HRV, via PPG)</b> during a short guided session, and turns it into <b>two easy-to-read leadership scores</b> — with a clear report, practical coaching tips, and progress tracking over time.</p>
+    <p>The scoring is a <b>presentation / interpretation layer</b> on top of the device's existing signal pipeline. <b>No new EEG algorithm is required</b> — we read the device's outputs and turn them into the two indices, their meaning, and actions.</p>
+  </div>
+
+  <h2><span class="n">2</span>The two traits</h2>
+  <div class="two">
+    <div class="box n">
+      <h3 style="color:var(--green)">N — Neuroplastic (Adaptive Index)</h3>
+      <p>How well the mind <b>adapts, stays calm and recovers</b> under pressure.</p>
+      <p><b>Mainly from HRV</b> (heart): SDNN, RMSSD, Stress Resistance, Brain Balance. <i>A strong, direct read.</i></p>
+    </div>
+    <div class="box t">
+      <h3 style="color:var(--blue)">T — Techno-Sapient (Cognitive-Readiness Index)</h3>
+      <p>How well the person <b>sustains focus and mental stamina</b> in complex, technology-mediated work.</p>
+      <p><b>Mainly from EEG</b> (brain): Focus, Brain Fatigue, Mental Pressure. <i>A cognitive-readiness read — not a measure of judgement quality.</i></p>
+    </div>
+  </div>
+  <p>Each score runs from <b>0–100</b> and sits in one of <b>five stages</b> (Constrained → Emerging → Developing → Strong → Exceptional).</p>
+
+  <h2><span class="n">3</span>How it works — four simple steps</h2>
+  <div class="card">
+    <div class="step"><div class="dot">1</div><div><b>Wear the headband</b> — the person puts on the sensor headband for a short session (a few minutes).</div></div>
+    <div class="step"><div class="dot">2</div><div><b>The session runs</b> — a calm/recovery scene and a focus/challenge scene, while the device reads brain &amp; heart signals.</div></div>
+    <div class="step"><div class="dot">3</div><div><b>Our system scores it</b> — the readings become the two scores (N and T), each placed in its stage.</div></div>
+    <div class="step"><div class="dot">4</div><div><b>A clear report is produced</b> — plain-language meaning, strengths, growth areas, coaching actions, and the trend over time.</div></div>
+  </div>
+
+  <h2><span class="n">4</span>What the report shows</h2>
+  <div class="card">
+    <ul>
+      <li>The <b>two scores</b> (N and T), each with its stage</li>
+      <li>A plain-language <b>"what this means"</b> for leadership</li>
+      <li><b>Practical coaching actions</b> per person</li>
+      <li>A simple <b>brain-rhythm chart</b> of the session</li>
+      <li><b>Progress over time</b> — improving, holding, or slipping</li>
+    </ul>
+    <p>An AI assistant writes the explanation in warm, personalised, easy-to-read language — different for each person, based on their own results.</p>
+  </div>
+
+  <h2><span class="n">5</span>How we keep it honest &amp; safe</h2>
+  <div class="safe">
+    <ul>
+      <li>Every result is a <b>supportive indicator for development — never a verdict</b> or a label.</li>
+      <li>We always say a reading <b>"is consistent with"</b>, not that the person definitively "is" that way.</li>
+      <li>We lead with the <b>trend over time</b>; a single session is a provisional snapshot.</li>
+      <li>The scores are <b>checked against expert human judgement</b> in a trial before anyone relies on them.</li>
+    </ul>
+  </div>
+
+  <!-- ======================= PART 2 ======================= -->
+  <div class="part">PART 2 — TECHNICAL DETAIL <small>For the build team</small></div>
+
+  <h2><span class="n">6</span>The 11 readings → two indices</h2>
+  <div class="card">
+    <p>The device provides eleven readings, normalised and combined into N and T:</p>
+    <table>
+      <tr><th>Index</th><th>Primary inputs</th><th>Context (not weighted)</th></tr>
+      <tr><td><b>N</b></td><td>SDNN, RMSSD, Stress Resistance, Brain Balance</td><td>Fatigue, LF/HF · HR</td></tr>
+      <tr><td><b>T</b></td><td>Focus, Brain Fatigue (inverse), Mental Pressure (inverse)</td><td>Relaxation</td></tr>
+    </table>
+    <p><i>Emotional State is the 11th reading — held (unweighted) until its polarity is confirmed.</i></p>
+    <p style="margin-top:6px">Combining formula (from the spec):</p>
+    <p><code>N = 0.30·SDNN + 0.25·RMSSD + 0.25·StressResistance + 0.20·BrainBalance</code><br>
+       <code>T = 0.40·Focus + 0.35·(100−BrainFatigue) + 0.25·(100−MentalPressure)</code></p>
+    <p>Normalisation: each reading → 0–100 (inverse ones flipped as <code>100 − value</code>). Example: <code>SDNN 46 → (46−30)/60×100 = 26.7</code>.</p>
+  </div>
+
+  <h2><span class="n">7</span>Architecture &amp; data flow</h2>
+  <pre><span class="c">// End-to-end pipeline</span>
+Device (EEG + PPG)
+   → SDK / Webhook            <span class="c">// signals reach us</span>
+   → Ingestion API            <span class="c">// validate + store raw</span>
+   → Signal Processing        <span class="c">// (raw route only) band-power + HRV → 11 readings</span>
+   → Scoring Engine           <span class="c">// normalise → N/T formula → 5 stages</span>
+   → Report Generator         <span class="c">// HTML → PDF</span>
+   → AI Layer                 <span class="c">// personalised text, trend</span>
+   → Frontend / API           <span class="c">// participant + coach view</span></pre>
+  <table>
+    <tr><th>Mode</th><th>How data arrives</th><th>Our work</th></tr>
+    <tr><td><b>A · Summary</b> (webhook)</td><td>The device pipeline computes the 11 readings, POSTs them to our endpoint at session end</td><td>Score → report (simplest)</td></tr>
+    <tr><td><b>B · Raw stream</b></td><td>Continuous EEG+PPG samples over BLE/LSL</td><td>Derive band-power (MNE) + HRV (NeuroKit2) → 11 readings, then score → report</td></tr>
+  </table>
+
+  <h2><span class="n">8</span>Technology stack</h2>
+  <table>
+    <tr><th>Layer</th><th>Technology</th></tr>
+    <tr><td>Backend / API</td><td>Django + DRF · JWT auth</td></tr>
+    <tr><td>EEG signal processing</td><td>MNE-Python, SciPy, NumPy (band-power, filtering, ICA)</td></tr>
+    <tr><td>HRV / PPG</td><td>NeuroKit2 (SDNN, RMSSD, RR intervals)</td></tr>
+    <tr><td>Real-time streaming (raw mode)</td><td>LSL / device BLE SDK</td></tr>
+    <tr><td>Calibration / ML</td><td>scikit-learn (weight/band re-fit)</td></tr>
+    <tr><td>AI (interpretation, coaching)</td><td>Claude via <code>anthropic</code> SDK</td></tr>
+    <tr><td>Database</td><td>PostgreSQL / MySQL</td></tr>
+    <tr><td>Report → PDF</td><td>HTML template → WeasyPrint / Playwright</td></tr>
+    <tr><td>Background jobs</td><td>Celery + Redis</td></tr>
+    <tr><td>Frontend</td><td>Web dashboard (participant + coach)</td></tr>
+  </table>
+
+  <h2><span class="n">9</span>Components to build</h2>
+  <table>
+    <tr><th>#</th><th>Module</th><th>Responsibility</th></tr>
+    <tr><td>1</td><td>Device integration / ingestion</td><td>SDK connect, auth, webhook, signal-quality gate</td></tr>
+    <tr><td>2</td><td>Signal processing (raw mode)</td><td>EEG band-power, HRV, artifact cleaning, derive composites</td></tr>
+    <tr><td>3</td><td>Scoring engine</td><td>Normalise, N/T formulas, 5-stage banding — config-driven weights</td></tr>
+    <tr><td>4</td><td>Report generator</td><td>Scores, interpretation, actions, brain-rhythm chart, trend</td></tr>
+    <tr><td>5</td><td>AI layer</td><td>Artifact cleaning, EEG+HRV fusion, trend detection, personalised text</td></tr>
+    <tr><td>6</td><td>Session &amp; trajectory</td><td>Multi-session storage, trend as headline</td></tr>
+    <tr><td>7</td><td>Calibration pipeline</td><td>Pilot ingestion, human-rater comparison, weight/band re-fit</td></tr>
+    <tr><td>8</td><td>Frontend / API</td><td>Participant &amp; coach dashboards, report view/download</td></tr>
+  </table>
+
+  <h2><span class="n">10</span>Phased delivery plan</h2>
+  <div class="phase"><b>Phase 0 — Setup &amp; data access:</b> project scaffold, DB, auth; device SDK + authenticate; register ingestion webhook; confirm data contract.</div>
+  <div class="phase"><b>Phase 1 — Ingestion &amp; readings:</b> Mode A webhook receive; Mode B (raw) band-power + HRV + artifact rejection + derive composites; quality gates.</div>
+  <div class="phase"><b>Phase 2 — Scoring engine:</b> normalisation, N/T formulas, 5-stage banding; weights/bands in a config file (re-fittable).</div>
+  <div class="phase"><b>Phase 3 — Report generator:</b> Executive report (scores, interpretation, actions, chart, trend); two-layer wording; HTML → PDF.</div>
+  <div class="phase"><b>Phase 4 — AI layer:</b> Claude-generated personalised interpretation &amp; coaching; trend detection; optional coach chatbot.</div>
+  <div class="phase"><b>Phase 5 — VR integration:</b> recovery scene → N, cognitive-load scene → T; capture windows synced.</div>
+  <div class="phase"><b>Phase 6 — Multi-session &amp; platform:</b> session history, trajectory as headline; dashboards; hosting &amp; consent.</div>
+  <div class="phase"><b>Phase 7 — Calibration:</b> ingest 20-participant pilot + human-rater scores; re-fit weights/bands (target weighted κ ≥ 0.6); retain raw signals.</div>
+
+  <h2><span class="n">11</span>Calibration approach</h2>
+  <ul>
+    <li>Starting weights/bands from the spec — the build works immediately without the pilot.</li>
+    <li>Run the 20-participant pilot → machine N/T vs trained human-rater ratings.</li>
+    <li>Re-fit weights/bands (scikit-learn) so the machine agrees with raters (weighted κ ≥ 0.6).</li>
+    <li>Re-derive HRV bands from the cohort's own seated-VR baseline (not resting norms).</li>
+  </ul>
+
+  <h2><span class="n">12</span>Design principles (locked)</h2>
+  <div class="card">
+    <ul>
+      <li><b>Config-driven</b> weights/bands — recalibration is a config change, not code.</li>
+      <li><b>Two-layer output</b> — "is consistent with", never "is".</li>
+      <li><b>Trajectory is the headline</b>; a single session is provisional (with a confidence band).</li>
+      <li><b>Retain raw EEG/PPG</b> for recalibration and audit.</li>
+      <li><b>Scene-aware</b> — T from a cognitive-load scene, N from a recovery scene.</li>
+      <li><b>Emotional State held</b> until polarity is confirmed.</li>
+    </ul>
+  </div>
+
+  <h2><span class="n">13</span>Risks &amp; mitigations</h2>
+  <table>
+    <tr><th>Risk</th><th>Mitigation</th></tr>
+    <tr><td>Gamma band noisy in VR (muscle artifact)</td><td>Rely on Beta/Alpha/Theta; treat Gamma as directional only</td></tr>
+    <tr><td>SDNN unstable on short capture</td><td>Standardise ≥5 min for SDNN; RMSSD fine at 3 min</td></tr>
+    <tr><td>Single-session over-read</td><td>Lead with trajectory; show a confidence band</td></tr>
+    <tr><td>Composites differ if off the original pipeline</td><td>Document as our own implementation; calibrate on the pilot</td></tr>
+    <tr><td>Inference-layer over-claim</td><td>Two-layer wording enforced in the UI copy</td></tr>
+  </table>
+
+  <!-- ======================= PART 3 ======================= -->
+  <div class="part">PART 3 — REQUIREMENTS &amp; DELIVERABLES</div>
+
+  <h2><span class="n">14</span>What we need to proceed</h2>
+  <div class="need">
+    <table>
+      <tr><th>From client</th><th>Why</th></tr>
+      <tr><td><b>The device</b> (EEG + PPG capable)</td><td>To capture brain + heart signals — see the Device Details document</td></tr>
+      <tr><td><b>Small trial group</b> (~20 participants + trained assessors)</td><td>To fine-tune and validate the scores — needs real people &amp; expert reviewers</td></tr>
+      <tr><td><b>Scene &amp; scope decisions</b></td><td>VR scenes (recovery + cognitive-load), platform, data hosting &amp; consent, branding</td></tr>
+    </table>
+    <p style="margin:8px 0 0"><i>Everything else — scoring, report, AI, sample data, integration — is handled on our side.</i></p>
+  </div>
+
+  <h2><span class="n">15</span>Deliverables</h2>
+  <ul>
+    <li>Working N &amp; T scoring + Executive report (starting from the spec's values)</li>
+    <li>AI-generated personalised interpretation &amp; coaching</li>
+    <li>Multi-session progress tracking (trajectory)</li>
+    <li>Calibrated, validated scores after the trial</li>
+  </ul>
+
+  <div class="foot">
+  </div>
+
+</div>
+</body>
+</html>
