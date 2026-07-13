@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NETRA N & T — Device Options Comparison</title>
+<style>
+  :root{ --ink:#1f2a37; --muted:#5f6b7a; --line:#e6ebf1; --bg:#f6f9fc; --card:#fff;
+         --blue:#2e5496; --green:#2e9e5b; --amber:#c0842a; --red:#c0392b; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Segoe UI',system-ui,sans-serif; line-height:1.6; }
+  .wrap{ max-width:980px; margin:0 auto; padding:42px 26px 80px; }
+  h1{ font-size:26px; margin:0 0 4px; } h1 span{ color:var(--blue); }
+  .sub{ color:var(--muted); font-size:14px; margin-bottom:24px; }
+  h2{ font-size:18px; margin:30px 0 10px; padding-bottom:6px; border-bottom:2px solid var(--line); }
+  p,li{ font-size:14px; } ul{ margin:6px 0; padding-left:22px; } li{ margin:4px 0; }
+  .note{ background:#eef4ff; border:1px solid #cfe0ff; border-radius:10px; padding:14px 18px; font-size:13.5px; }
+  .ask{ background:#fff8ec; border:1px solid #f0dcae; border-radius:10px; padding:14px 18px; font-size:13.5px; }
+  table{ width:100%; border-collapse:collapse; font-size:13px; background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin:10px 0; }
+  th,td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th{ background:#eef2f7; font-size:11px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); }
+  td.dim{ font-weight:600; width:170px; background:#fafbfd; }
+  tr:last-child td{ border-bottom:none; }
+  .plain{ display:block; margin-top:5px; color:var(--muted); font-size:12px; font-style:italic; }
+  .src{ font-size:12px; color:var(--muted); }
+  .foot{ margin-top:34px; padding-top:14px; border-top:1px solid var(--line); font-size:12px; color:var(--muted); }
+  a{ color:var(--blue); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>NETRA™ <span>N &amp; T</span> — Device Options Comparison</h1>
+  <div class="sub">Side-by-side comparison of the two device options · HealSphere and Muse 2 / Muse S</div>
+
+  <div class="note">
+    <b>What the assessment reads:</b> the two indices are built from eleven readings that require two kinds of signal —
+    <b>EEG</b> (brain rhythms) and a <b>heart signal (PPG → HRV)</b>. This document compares the two device options
+    on verified facts only. Each row has a short plain-language note. Muse details are from the manufacturer's public
+    documentation; HealSphere details are from the document <i>EEG FOR FUTUREFIRST LEADERSHIP USE ONLY_PDF.pdf</i>
+    and the Heal &amp; Soul technical white paper referenced within it.
+  </div>
+
+  <h2>Comparison</h2>
+  <table>
+    <tr>
+      <th>Dimension</th>
+      <th>HealSphere (Heal &amp; Soul Technology)</th>
+      <th>Muse 2 / Muse S (Interaxon)</th>
+    </tr>
+    <tr>
+      <td class="dim">Type</td>
+      <td>EEG + PPG platform with its own acquisition pipeline
+        <span class="plain">Not just a headset but a complete system. It captures the brain (EEG) and heart (PPG) signals during a session, and it already handles everything from capturing to processing the signal — so we don't build the signal-capture part.</span></td>
+      <td>Consumer EEG headband
+        <span class="plain">An off-the-shelf headband anyone can buy online. It gives only the raw brain and heart signal; our software does the rest.</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Brain reading (EEG)</td>
+      <td>EEG acquisition present (dry Ag/AgCl electrodes); channel count / sampling rate not specified in shared documents
+        <span class="plain">It reads brain activity, but the exact number of sensors and the level of detail aren't stated in the documents we were given — we'd confirm this with them.</span></td>
+      <td>4 channels (TP9, AF7, AF8, TP10) @ 256 Hz
+        <span class="plain">It reads brain activity from 4 points on the head, fast enough for clean analysis.</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Heart signal (PPG / HRV)</td>
+      <td>PPG acquisition present (per EEG &amp; PPG white paper)
+        <span class="plain">It also reads the heart signal, which is what the “N” (adaptability) side needs.</span></td>
+      <td>PPG present on Muse 2 / Muse S → heart rate; RR / HRV can be derived (64 Hz, per public docs)
+        <span class="plain">It reads the heart signal too; heart rate and its variability can be worked out from it.</span></td>
+    </tr>
+    <tr>
+      <td class="dim">The 11 readings</td>
+      <td>As per the shared specification, the 11 readings are understood to be available through HealSphere's pipeline (to be confirmed with the vendor)
+        <span class="plain">The specification says HealSphere already produces the 11 readings ready-made — we would just read them. To be confirmed directly with them.</span></td>
+      <td>Not output by name — raw EEG + PPG are provided; the 11 readings would be derived in our software
+        <span class="plain">Muse gives only the raw signal; we calculate the 11 readings ourselves.</span></td>
+    </tr>
+    <tr>
+      <td class="dim">How we get the data</td>
+      <td>Readings consumed from HealSphere's existing pipeline (per spec); SDK/API specifics not detailed in shared documents
+        <span class="plain">We'd read the readings from HealSphere's own system; exactly how we connect isn't detailed yet — to confirm.</span></td>
+      <td>Public SDK — streaming via LSL / BrainFlow (e.g. muse-lsl)
+        <span class="plain">Open, well-documented, free tools are available to connect to it.</span></td>
+    </tr>
+    <tr>
+      <td class="dim">What our build would do</td>
+      <td>Read the 11 ready outputs, compute N &amp; T, and generate the report — “no new EEG algorithm required” (per spec)
+        <span class="plain">We take the ready readings and turn them into the two scores and the report — no brain-signal processing needed on our side.</span></td>
+      <td>Ingest raw EEG + PPG, then derive the 11 readings, compute N &amp; T, and generate the report
+        <span class="plain">We process the raw signal first, work out the 11 readings, then make the scores and report.</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Vendor dependency <span style="font-weight:400;color:var(--muted)">(qualitative)</span></td>
+      <td>Higher — single proprietary vendor
+        <span class="plain">We rely more on one company for the device and the data.</span></td>
+      <td>Lower — consumer device with a public SDK
+        <span class="plain">It's a common product with open tools, so less dependence on any one company.</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Development effort <span style="font-weight:400;color:var(--muted)">(qualitative)</span></td>
+      <td>Lower — if the readings/APIs are available (no new EEG algorithm, per spec)
+        <span class="plain">Less development effort, provided the required APIs and outputs are available.</span></td>
+      <td>Higher — the 11 readings are derived in software
+        <span class="plain">Higher development effort, as the required readings would be derived within our software layer.</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Electrical / safety</td>
+      <td>Programmable, current-limited LED; ≤ 50 mA, 3.3 V (per Heal &amp; Soul white paper)
+        <span class="plain">Uses safe, low-power sensors, per their own technical paper.</span></td>
+      <td>Consumer device (per manufacturer documentation)
+        <span class="plain">A standard, everyday consumer product.</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Emotional State (11th reading)</td>
+      <td>Provided, but held / unweighted until HealSphere confirms polarity (per spec)
+        <span class="plain">It's given, but not used in the score yet — we need them to confirm which direction it means.</span></td>
+      <td>Would be derived if used
+        <span class="plain">We'd calculate it; its direction still needs to be confirmed.</span></td>
+    </tr>
+  </table>
+
+  <h2>The eleven readings — per device</h2>
+  <p style="font-size:13.5px;margin:6px 0 4px"><b>The pattern is the same across all 11:</b> HealSphere provides each reading ready-made; with Muse, we calculate each one ourselves from the raw signal.</p>
+  <p class="src">Reading names and index mapping are from the specification document (see Sources). HealSphere: produced ready by its pipeline.
+     Muse: derived in our software (HRV readings from PPG; brain-rhythm readings from EEG).</p>
+  <table>
+    <tr>
+      <th>Reading</th>
+      <th>Index</th>
+      <th>HealSphere</th>
+      <th>Muse 2 / Muse S</th>
+    </tr>
+    <tr><td>1. SDNN</td><td>N</td><td>Ready output (per spec)</td><td>Derived (from PPG → RR)</td></tr>
+    <tr><td>2. RMSSD</td><td>N</td><td>Ready output (per spec)</td><td>Derived (from PPG → RR)</td></tr>
+    <tr><td>3. Stress Resistance</td><td>N</td><td>Ready output (per spec)</td><td>Derived in software</td></tr>
+    <tr><td>4. Brain Balance</td><td>N</td><td>Ready output (per spec)</td><td>Derived in software</td></tr>
+    <tr><td>5. Fatigue</td><td>N</td><td>Ready output (per spec)</td><td>Derived in software</td></tr>
+    <tr><td>6. LF/HF · HR</td><td>N (context)</td><td>Ready output (per spec)</td><td>Derived (from PPG → RR)</td></tr>
+    <tr><td>7. Focus</td><td>T</td><td>Ready output (per spec)</td><td>Derived (from EEG bands)</td></tr>
+    <tr><td>8. Brain Fatigue</td><td>T</td><td>Ready output (per spec)</td><td>Derived (from EEG bands)</td></tr>
+    <tr><td>9. Mental Pressure</td><td>T</td><td>Ready output (per spec)</td><td>Derived (from EEG bands)</td></tr>
+    <tr><td>10. Relaxation</td><td>T</td><td>Ready output (per spec)</td><td>Derived (from EEG bands)</td></tr>
+    <tr><td>11. Emotional State</td><td>Hold</td><td>Provided; held/unweighted until polarity confirmed (per spec)</td><td>Derived; polarity to confirm</td></tr>
+  </table>
+
+  <h2>To confirm with HealSphere</h2>
+  <div class="ask">
+    <p style="margin:0 0 6px"><b>Not stated in the shared documents — needs confirmation before build:</b></p>
+    <ul style="margin:0">
+      <li><b>EEG channels &amp; sampling rate</b> of the HealSphere device.</li>
+      <li><b>Heart signal output format</b> — does it expose RR intervals, or already-computed SDNN / RMSSD?</li>
+      <li><b>SDK / API</b> — how the 11 readings are accessed (live stream, webhook/summary, or file export).</li>
+      <li><b>A sample data file / session recording</b> — to confirm the exact output format.</li>
+      <li><b>Emotional State polarity</b> — direction to confirm before it can be weighted (per spec).</li>
+    </ul>
+  </div>
+
+  <h2>Sources</h2>
+  <ul class="src">
+    <li><b>HealSphere:</b> <i>EEG FOR FUTUREFIRST LEADERSHIP USE ONLY_PDF.pdf</i> (page 2 — architecture; page 3 — 11-reading mapping; reference #38 — Heal &amp; Soul EEG &amp; PPG Technical White Paper); <a href="https://healandsoultech.com/">healandsoultech.com</a></li>
+    <li><b>Muse 2 / Muse S — EEG channels &amp; PPG:</b> <a href="https://petal.tech/">petal.tech</a>, <a href="https://github.com/alexandrebarachant/muse-lsl">muse-lsl</a></li>
+    <li><b>Muse 2 / Muse S — public SDK / streaming:</b> <a href="https://github.com/alexandrebarachant/muse-lsl">muse-lsl (LSL)</a>, BrainFlow</li>
+  </ul>
+
+  <div class="foot">
+    NETRA™ N &amp; T — Device options comparison. Verified/sourced facts only; no recommendation. Confidential.
+  </div>
+
+</div>
+</body>
+</html>
